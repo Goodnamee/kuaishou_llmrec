@@ -1,0 +1,26 @@
+# Large dependencies (cloned separately)
+LLaMA-Factory/
+
+# Data (uploaded separately to AutoDL)
+competition_data/
+dataset.tar.gz
+*.parquet
+*.jsonl
+
+# Training outputs
+output/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# System
+.cache/
+.DS_Store
+Thumbs.db
+
+# Misc large files
+*.pdf
+输出.csv
