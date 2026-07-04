@@ -23,4 +23,5 @@ Thumbs.db
 
 # Misc large files
 *.pdf
+*.tar.gz
 输出.csv
