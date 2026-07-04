@@ -22,7 +22,7 @@ Usage (AutoDL):
     --shuffle --report
 """
 
-import argparse, collections, json, random, re, sys
+import argparse, collections, json, os, random, re, sys
 from pathlib import Path
 import pandas as pd
 
@@ -45,7 +45,8 @@ _TOKENS_TO_NORMALIZE = [
     ('<|pid_living_end|>', '<pid_living_end>'),
 ]
 
-HF_BASE = 'https://huggingface.co/datasets/OpenOneRec/Explorer_LLM_Rec_Competition/resolve/main'
+_HF_MIRROR = os.environ.get('HF_ENDPOINT', 'https://huggingface.co').rstrip('/')
+HF_BASE = f'{_HF_MIRROR}/datasets/OpenOneRec/Explorer_LLM_Rec_Competition/resolve/main'
 
 
 # ===== Token cleaning (same logic as convertv2.py) =====
