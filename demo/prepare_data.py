@@ -265,6 +265,10 @@ def main():
                         action='store_false')
     parser.add_argument('--no-add-think-pattern', dest='add_think_pattern',
                         action='store_false')
+    parser.add_argument('--oversample-competition', type=int, default=1,
+                        help='Repeat competition data N times (oversampling)')
+    parser.add_argument('--oversample-general', type=int, default=1,
+                        help='Repeat general data N times (oversampling)')
     parser.add_argument('--report', action='store_true',
                         help='Print statistics report')
     parser.set_defaults(filter_sid_tokens=True, add_think_pattern=True)
@@ -275,11 +279,23 @@ def main():
 
     # 1) HF OneReason_General (streaming)
     if not args.no_general:
-        all_records.extend(process_general(args, stats))
+        general_records = process_general(args, stats)
+        if args.oversample_general > 1:
+            general_records = general_records * args.oversample_general
+            stats['kept:general'] = len(general_records)
+            print(f'[INFO] oversampled general x{args.oversample_general} -> {len(general_records)}',
+                  file=sys.stderr)
+        all_records.extend(general_records)
 
     # 2) Competition JSONL (local)
     if args.competition_data:
-        all_records.extend(process_competition_jsonl(args, stats))
+        comp_records = process_competition_jsonl(args, stats)
+        if args.oversample_competition > 1:
+            comp_records = comp_records * args.oversample_competition
+            stats['kept:competition'] = len(comp_records)
+            print(f'[INFO] oversampled competition x{args.oversample_competition} -> {len(comp_records)}',
+                  file=sys.stderr)
+        all_records.extend(comp_records)
 
     if not all_records:
         print('[ERROR] No records produced. Check input data.', file=sys.stderr)
